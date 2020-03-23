@@ -19,6 +19,12 @@ subprojects {
             mavenBom("org.springframework.boot:spring-boot-dependencies:${property("spring.boot.version")}")
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("spring.cloud.version")}")
         }
+
+    }
+
+    configurations {
+        val developmentOnly by creating
+        create("runtimeOnly").extendsFrom(developmentOnly)
     }
 
     tasks.withType<KotlinCompile> {

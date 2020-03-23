@@ -9,4 +9,4 @@ pluginManagement {
 
 rootProject.name = "trader-forex"
 
-include("forex-domain", "forex-core")
+include("forex-domain", "forex-core", "forex-service")
