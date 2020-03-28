@@ -3,6 +3,7 @@ plugins {
     kotlin("kapt")
     kotlin("plugin.spring")
     id("org.springframework.boot")
+    jacoco
 }
 
 configurations.testImplementation {

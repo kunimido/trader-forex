@@ -17,7 +17,6 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:${property("spring.boot.version")}")
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("spring.cloud.version")}")
         }
 
     }
@@ -29,7 +28,7 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "13"
             freeCompilerArgs = listOf("-Xjsr305=strict")
         }
     }
