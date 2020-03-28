@@ -3,6 +3,7 @@ plugins {
     kotlin("kapt")
     kotlin("plugin.spring")
     id("org.springframework.boot")
+    id("com.google.cloud.tools.jib")
     jacoco
 }
 
@@ -35,4 +36,16 @@ dependencies {
     // Development tools
     kapt("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+}
+
+jib {
+    from {
+        image = "openjdk:13-jdk-alpine"
+    }
+    to {
+        image = "kunimido/trader-${project.name}"
+    }
+    container {
+        ports = listOf("8080")
+    }
 }
