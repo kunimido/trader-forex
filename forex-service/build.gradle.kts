@@ -1,51 +1,51 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     kotlin("jvm")
-    kotlin("kapt")
-    kotlin("plugin.spring")
-    id("org.springframework.boot")
-    id("com.google.cloud.tools.jib")
+    kotlin("plugin.allopen")
+    id("io.quarkus")
     jacoco
 }
 
-configurations.testImplementation {
-    exclude(group = "org.junit.vintage")
-    exclude(group = "org.mockito")
-}
-
 dependencies {
-    // Kotlin
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${property("kotlin.coroutines.version")}")
-
     // Project
     implementation(project(":forex-core"))
     implementation(project(":forex-domain"))
 
+    // Kotlin
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${property("kotlinx.coroutines.version")}")
+
     // Frameworks
+    implementation(enforcedPlatform("io.quarkus:quarkus-universe-bom:${property("quarkus.platform.version")}"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.apache.kafka:kafka-streams")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation("io.quarkus:quarkus-container-image-jib")
+    implementation("io.quarkus:quarkus-kotlin")
+    implementation("io.quarkus:quarkus-resteasy-jackson")
+    implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kafka")
 
     // Tests
-    testImplementation("com.ninja-squad:springmockk:2.0.0")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.kafka:spring-kafka-test")
-
-    // Development tools
-    kapt("org.springframework.boot:spring-boot-configuration-processor")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation("io.mockk:mockk:${property("mockk.version")}")
+    testImplementation("io.quarkus:quarkus-junit5")
+    testImplementation("io.rest-assured:kotlin-extensions")
+    testImplementation("io.smallrye.reactive:smallrye-reactive-messaging-in-memory")
 }
 
-jib {
-    from {
-        image = "openjdk:13-jdk-alpine"
+allOpen {
+    annotation("io.quarkus.test.junit.QuarkusTest")
+    annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("javax.ws.rs.Path")
+}
+
+tasks {
+    processResources {
+        filesMatching("application.properties") {
+            filter(ReplaceTokens::class,
+                    "tokens" to project.properties.filterValues { v -> v != null && v is String })
+        }
     }
-    to {
-        image = "kunimido/trader-${project.name}"
-    }
-    container {
-        ports = listOf("8080")
+
+    test {
+        systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
     }
 }
