@@ -2,6 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.jpa")
     kotlin("plugin.allopen")
     id("io.quarkus")
     jacoco
@@ -20,6 +21,8 @@ dependencies {
     implementation(enforcedPlatform("io.quarkus:quarkus-universe-bom:${property("quarkus.platform.version")}"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.quarkus:quarkus-container-image-jib")
+    implementation("io.quarkus:quarkus-hibernate-orm-panache-kotlin")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-resteasy-jackson")
     implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kafka")
@@ -34,7 +37,7 @@ dependencies {
 allOpen {
     annotation("io.quarkus.test.junit.QuarkusTest")
     annotation("javax.enterprise.context.ApplicationScoped")
-    annotation("javax.ws.rs.Path")
+    annotation("javax.persistence.Entity")
 }
 
 tasks {
@@ -47,5 +50,8 @@ tasks {
 
     test {
         systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+        useJUnitPlatform {
+            excludeTags("database")
+        }
     }
 }

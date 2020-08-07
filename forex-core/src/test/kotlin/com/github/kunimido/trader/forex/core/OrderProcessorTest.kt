@@ -10,26 +10,21 @@ import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.LocalDate
 
-private val EUR = Currency("EUR", 2)
-private val JPY = Currency("JPY", 0)
-private val EUR_JPY = CurrencyPair(EUR, JPY, 2)
+class OrderProcessorTest {
 
-internal class OrderProcessorTest {
+    val eur = Currency("EUR", 2)
 
-    private val orderProcessor: OrderProcessor = OrderProcessor()
+    val jpy = Currency("JPY", 0)
+
+    val eurJpy = CurrencyPair(eur, jpy, 2)
+
+    val orderProcessor: OrderProcessor = OrderProcessor()
 
     @Test
     fun `OrderProcessor is not implemented yet`() {
         assertThrows<NotImplementedError> {
-            orderProcessor.process(
-                    SpotOrder(
-                            EUR_JPY,
-                            SELL,
-                            Amount(EUR, BigDecimal("1000")),
-                            LocalDate.now().plusDays(1),
-                            LocalDate.now()
-                    )
-            )
+            orderProcessor.process(SpotOrder(eurJpy, SELL, Amount(eur, BigDecimal("1000")),
+                    LocalDate.now().plusDays(1), LocalDate.now()))
         }
     }
 

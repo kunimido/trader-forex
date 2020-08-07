@@ -39,6 +39,10 @@ class Amount(val currency: Currency, _quantity: BigDecimal) : Comparable<Amount>
         return result
     }
 
+    override fun toString(): String {
+        return "Amount(currency=$currency, quantity=$quantity)"
+    }
+
     private fun requireSameCurrency(other: Amount) = require(currency == other.currency) {
         "Amounts must have the same currency: ${other.currency} differs from $currency"
     }

@@ -3,7 +3,7 @@ package com.github.kunimido.trader.forex.domain
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class CurrencyTest {
+class CurrencyTest {
 
     @Test
     fun `constructor with code="JPY" and decimalPlaces=0 should pass`() {

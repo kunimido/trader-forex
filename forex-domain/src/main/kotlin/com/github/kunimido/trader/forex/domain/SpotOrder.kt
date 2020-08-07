@@ -14,7 +14,7 @@ data class SpotOrder(
         require(pair.contains(amount.currency)) {
             "amount currency should be one of ${pair.code}, but was ${amount.currency}"
         }
-        require(spotDate > tradeDate) { "spot date must be after trade date" }
+        require(spotDate >= tradeDate) { "spot date must be after trade date" }
     }
 
 }
